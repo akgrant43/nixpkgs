@@ -4,6 +4,7 @@
   fetchzip,
   wrapGAppsHook3,
   cairo,
+  copyDesktopItems,
   dbus,
   fontconfig,
   freetype,
@@ -19,6 +20,7 @@
   libglvnd,
   libuuid,
   libxcb,
+  makeDesktopItem,
   harfbuzz,
   libsoup_3,
   webkitgtk_4_1,
@@ -37,6 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     wrapGAppsHook3
+    copyDesktopItems
   ];
 
   sourceRoot = ".";
@@ -46,10 +49,22 @@ stdenv.mkDerivation (finalAttrs: {
   dontPatchELF = true;
   dontStrip = true;
 
+  desktopItems = with finalAttrs; [
+    (makeDesktopItem {
+      name = pname;
+      desktopName = "GlamorousToolkit";
+      exec = "GlamorousToolkit";
+      icon = "GlamorousToolkit";
+    })
+  ];
+
   installPhase = ''
     runHook preInstall
 
     install -d $out/bin $out/lib
+    mkdir -p $out/share/icons/hicolor/scalable/apps
+
+    cp ${./gt.svg} $out/share/icons/hicolor/scalable/apps/GlamorousToolkit.svg
     cp -r $src/bin $src/lib $out/
     cp ${./GlamorousToolkit-GetImage} $out/bin/GlamorousToolkit-GetImage
 
