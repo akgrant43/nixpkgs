@@ -62,9 +62,8 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     install -d $out/bin $out/lib
-    mkdir -p $out/share/icons/hicolor/scalable/apps
+    install -Dm 444 ${./gt.svg} $out/share/icons/hicolor/scalable/apps/GlamorousToolkit.svg
 
-    cp ${./gt.svg} $out/share/icons/hicolor/scalable/apps/GlamorousToolkit.svg
     cp -r $src/bin $src/lib $out/
     cp ${./GlamorousToolkit-GetImage} $out/bin/GlamorousToolkit-GetImage
 
